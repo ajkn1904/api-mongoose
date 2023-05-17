@@ -6,14 +6,18 @@ import { useQuery } from '@tanstack/react-query';
 
 function App() {
 
-  //const [data, setData] = useState([]);
+  const [editor, setEditor] = useState([]);
   const { register, formState: { errors }, handleSubmit } = useForm()
   const [processing, setProcessing] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [detail, setDetail] = useState({});
+
+
 
   const { data = [], isLoading, refetch } = useQuery({
     queryKey: ['students'],
     queryFn: async () => {
-      const res = await fetch('http://localhost:5000/students')
+      const res = await fetch('https://api-mongo-server.vercel.app/students')
       const data = await res.json()
       return data
     }
@@ -35,7 +39,7 @@ function App() {
       grade: data.grade,
     }
 
-    fetch('http://localhost:5000/addStudent', {
+    fetch('https://api-mongo-server.vercel.app/addStudent', {
       method: 'POST',
       headers: {
         "content-type": "application/json",
@@ -52,6 +56,41 @@ function App() {
 
   }
 
+
+  const handleEdit = id => {
+    setIsEditing(true)
+
+    fetch(`https://api-mongo-server.vercel.app/students/${id}`)
+      .then(res => res.json())
+      .then(data => setEditor(data[0]))
+
+  }
+
+  const handleUpdateStudent = (data) => {
+    const stuId = document.getElementById('stu_id').innerHTML
+
+    let editDetail = [data]
+
+
+
+
+    fetch(`https://api-mongo-server.vercel.app/students/${stuId}`, {
+      method: 'PUT',
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(editDetail)
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        if (data.modifiedCount > 0) {
+          toast.success('Updated successful')
+          setIsEditing(false)
+          refetch()
+        }
+      })
+  }
 
   return (
     <div className="App">
@@ -85,13 +124,70 @@ function App() {
                 <td className='border'>{student.roll}</td>
                 <td className='border'>{student.grade}</td>
 
-                <td className='border'><button className='btn btn-error btn-sm' onClick={() => 'handleDelete(student._id)'}>Delete</button></td>
+                <td className='border'><button className='btn btn-error btn-sm' onClick={() => handleEdit(student._id)}>Edit</button></td>
               </tr>
 
               )
             }
           </tbody>
         </table>
+
+        {
+          isEditing && <div>
+            <h2 className='text-2xl my-4 font-bold text-center'>Edit {editor.name}'s Details</h2>
+
+            <form className='w-[90vw] sm:w-[500px] mx-auto border py-10 px-2' onSubmit={handleSubmit(handleUpdateStudent)}>
+
+
+              <div id='stu_id'>{editor._id}</div>
+              <div className='flex gap-3 items-center justify-between'>
+
+                <div>
+                  <label className="label">
+                    <span className="mr-3 label-text font-bold">Age</span>
+                  </label>
+                  <input type="text" placeholder={editor.age} className="w-[140px] my-2 px-3 rounded border"  {...register("age")} />
+                </div>
+
+                <div>
+                  <label className="label">
+                    <span className="mr-3 label-text font-bold">Section</span>
+                  </label>
+                  <input type="text" placeholder={editor.sec} className="w-[140px] my-2 px-3 rounded border"  {...register("sec")} />
+                </div>
+
+              </div>
+
+
+
+              <div className='flex gap-3 items-center justify-between'>
+
+                <div> <label className="label">
+                  <span className="mr-3 label-text font-bold">Roll</span>
+                </label>
+                  <input type="text" placeholder={editor.roll} className="w-[140px] my-2 px-3 rounded border"  {...register("roll")} />
+                </div>
+
+                <div>
+                  <label className="label">
+                    <span className="mr-3 label-text font-bold">Grade</span>
+                  </label>
+                  <input type="text" placeholder={editor.grade} className="w-[140px] my-2 px-3 rounded border"  {...register("grade")} />
+                </div>
+
+              </div>
+
+
+
+              <div className="flex flex-col w-full border-opacity-50">
+
+                <button className="w-[150px] mx-auto p-2 my-5 rounded-lg bg-green-500 text-white" type="submit" disabled={processing}>{processing ? 'Processing' : 'Edit Student'}</button>
+
+              </div>
+
+            </form>
+          </div>
+        }
       </div>
 
 
