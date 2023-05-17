@@ -97,6 +97,7 @@ function App() {
         if (data.modifiedCount > 0) {
           toast.success('Updated successful')
           setIsEditing(false)
+          form.reset()
           refetch()
         }
       }) 
