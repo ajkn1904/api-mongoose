@@ -60,7 +60,7 @@ function App() {
   const handleEdit = id => {
     setIsEditing(true)
 
-    fetch(`http://localhost:5000/students/${id}`)
+    fetch(`https://api-mongo-server.vercel.app/students/${id}`)
       .then(res => res.json())
       .then(data => setEditor(data[0]))
 
@@ -79,7 +79,7 @@ function App() {
 
     const stuId = document.getElementById('stu_id').innerHTML
     let editDetail = {age, sec, roll, grade}
-    console.log(editDetail, stuId);
+    //console.log(editDetail, stuId);
 
 
 
