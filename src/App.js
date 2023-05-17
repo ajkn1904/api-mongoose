@@ -156,14 +156,14 @@ function App() {
                   <label className="label">
                     <span className="mr-3 label-text font-bold">Age</span>
                   </label>
-                  <input type="text" placeholder={editor.age} className="w-[140px] my-2 px-3 rounded border"  name='age' />
+                  <input type="text" defaultValue={editor.age} className="w-[140px] my-2 px-3 rounded border"  name='age' />
                 </div>
 
                 <div>
                   <label className="label">
                     <span className="mr-3 label-text font-bold">Section</span>
                   </label>
-                  <input type="text" placeholder={editor.sec} className="w-[140px] my-2 px-3 rounded border"  name='sec' />
+                  <input type="text" defaultValue={editor.sec} className="w-[140px] my-2 px-3 rounded border"  name='sec' />
                 </div>
 
               </div>
@@ -175,14 +175,14 @@ function App() {
                 <div> <label className="label">
                   <span className="mr-3 label-text font-bold">Roll</span>
                 </label>
-                  <input type="text" placeholder={editor.roll} className="w-[140px] my-2 px-3 rounded border"  name='roll' />
+                  <input type="text" defaultValue={editor.roll} className="w-[140px] my-2 px-3 rounded border"  name='roll' />
                 </div>
 
                 <div>
                   <label className="label">
                     <span className="mr-3 label-text font-bold">Grade</span>
                   </label>
-                  <input type="text" placeholder={editor.grade} className="w-[140px] my-2 px-3 rounded border"  name='grade' />
+                  <input type="text" defaultValue={editor.grade} className="w-[140px] my-2 px-3 rounded border"  name='grade' />
                 </div>
 
               </div>
