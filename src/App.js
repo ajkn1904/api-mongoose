@@ -60,21 +60,31 @@ function App() {
   const handleEdit = id => {
     setIsEditing(true)
 
-    fetch(`https://api-mongo-server.vercel.app/students/${id}`)
+    fetch(`http://localhost:5000/students/${id}`)
       .then(res => res.json())
       .then(data => setEditor(data[0]))
 
   }
 
-  const handleUpdateStudent = (data) => {
+  const handleUpdateStudent = (event) => {
+    event.preventDefault();
+        
+        const form = event.target;
+        const age = form.age.value;
+        const sec = form.sec.value;
+        const roll = form.roll.value;
+        const grade = form.grade.value;
+    
+        
+
     const stuId = document.getElementById('stu_id').innerHTML
-
-    let editDetail = [data]
-
-
+    let editDetail = {age, sec, roll, grade}
+    console.log(editDetail, stuId);
 
 
-    fetch(`https://api-mongo-server.vercel.app/students/${stuId}`, {
+
+
+     fetch(`https://api-mongo-server.vercel.app/students/${stuId}`, {
       method: 'PUT',
       headers: {
         "content-type": "application/json"
@@ -89,7 +99,7 @@ function App() {
           setIsEditing(false)
           refetch()
         }
-      })
+      }) 
   }
 
   return (
@@ -136,7 +146,7 @@ function App() {
           isEditing && <div>
             <h2 className='text-2xl my-4 font-bold text-center'>Edit {editor.name}'s Details</h2>
 
-            <form className='w-[90vw] sm:w-[500px] mx-auto border py-10 px-2' onSubmit={handleSubmit(handleUpdateStudent)}>
+            <form className='w-[90vw] sm:w-[500px] mx-auto border py-10 px-2' onSubmit={handleUpdateStudent}>
 
 
               <div id='stu_id'>{editor._id}</div>
@@ -146,14 +156,14 @@ function App() {
                   <label className="label">
                     <span className="mr-3 label-text font-bold">Age</span>
                   </label>
-                  <input type="text" placeholder={editor.age} className="w-[140px] my-2 px-3 rounded border"  {...register("age")} />
+                  <input type="text" placeholder={editor.age} className="w-[140px] my-2 px-3 rounded border"  name='age' />
                 </div>
 
                 <div>
                   <label className="label">
                     <span className="mr-3 label-text font-bold">Section</span>
                   </label>
-                  <input type="text" placeholder={editor.sec} className="w-[140px] my-2 px-3 rounded border"  {...register("sec")} />
+                  <input type="text" placeholder={editor.sec} className="w-[140px] my-2 px-3 rounded border"  name='sec' />
                 </div>
 
               </div>
@@ -165,14 +175,14 @@ function App() {
                 <div> <label className="label">
                   <span className="mr-3 label-text font-bold">Roll</span>
                 </label>
-                  <input type="text" placeholder={editor.roll} className="w-[140px] my-2 px-3 rounded border"  {...register("roll")} />
+                  <input type="text" placeholder={editor.roll} className="w-[140px] my-2 px-3 rounded border"  name='roll' />
                 </div>
 
                 <div>
                   <label className="label">
                     <span className="mr-3 label-text font-bold">Grade</span>
                   </label>
-                  <input type="text" placeholder={editor.grade} className="w-[140px] my-2 px-3 rounded border"  {...register("grade")} />
+                  <input type="text" placeholder={editor.grade} className="w-[140px] my-2 px-3 rounded border"  name='grade' />
                 </div>
 
               </div>
